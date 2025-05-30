@@ -1,0 +1,149 @@
+﻿@model IEnumerable<BookBox.Models.Book>
+
+@{
+    ViewData["Title"] = "Books List";
+    bool isAdmin = Context.Request.Query["role"] == "admin";
+    bool isUser = Context.Request.Query["role"] == "user";
+    bool isGuest = !isAdmin && !isUser;
+}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: url('/images/library-banner.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+    }
+
+    .main-wrapper {
+        padding: 50px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .content {
+        background-color: rgba(0, 0, 0, 0.75);
+        padding: 30px 40px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 900px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        color: white;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #444;
+        text-align: left;
+    }
+
+    th {
+        background-color: #343a40;
+        font-weight: 600;
+    }
+
+    tr:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    a {
+        color: #17a2b8;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="main-wrapper">
+    <div class="content">
+        <h1>Books</h1>
+
+        <!-- Панель переключения ролей -->
+        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px;">
+            <small>ТЕСТОВЫЙ РЕЖИМ:</small>
+            <a href="?role=admin" class="btn btn-sm @(isAdmin ? "btn-success" : "btn-outline-success")">Admin</a>
+            <a href="?role=user" class="btn btn-sm @(isUser ? "btn-primary" : "btn-outline-primary")">User</a>
+            <a href="?" class="btn btn-sm @(isGuest ? "btn-secondary" : "btn-outline-secondary")">Guest</a>
+        </div>
+
+        @if (isAdmin)
+        {
+            <p>
+                <a asp-action="Create" class="btn btn-success">Create New Book</a>
+            </p>
+        }
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th style="width: 180px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@book.Id">Details</a>
+
+                            @if (isAdmin)
+                            {
+                                @: |
+                                <a asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+
+                                @: |
+                                <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
+                            }
+                            else if (isUser)
+                            {
+                                @: |
+                                <a asp-action="Buy" asp-route-id="@book.Id">Buy</a>
+                            }
+                            else
+                            {
+                                @: |
+                                <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Buy", new { id = book.Id })">Buy</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

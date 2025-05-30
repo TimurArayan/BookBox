@@ -1,0 +1,25 @@
+﻿@page
+@model BookBox.Pages.Profile.ProfileModel
+@{
+    ViewData["Title"] = "Профиль пользователя";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.CurrentUser == null)
+{
+    <p>Пользователь не найден.</p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.CurrentUser.Email</dd>
+
+        <dt class="col-sm-2">Имя пользователя</dt>
+        <dd class="col-sm-10">@Model.CurrentUser.UserName</dd>
+
+        <dt class="col-sm-2">Id пользователя</dt>
+        <dd class="col-sm-10">@Model.CurrentUser.Id</dd>
+    </dl>
+}

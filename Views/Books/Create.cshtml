@@ -1,0 +1,123 @@
+﻿@model BookBox.Models.Book
+
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: white;
+        background: url('/images/library-banner.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    .main-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+
+    .content {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 30px 40px;
+        border-radius: 12px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    }
+
+    h1 {
+        margin-bottom: 25px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    label {
+        font-weight: 600;
+        color: #eee;
+    }
+
+    input.form-control,
+    textarea.form-control,
+    select.form-control {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid #ccc;
+        color: white;
+    }
+
+        input.form-control:focus,
+        textarea.form-control:focus,
+        select.form-control:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        select.form-control option {
+            background-color: #333;
+            color: white;
+        }
+
+    .text-danger {
+        color: #ff6b6b;
+    }
+
+    .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="main-wrapper">
+    <div class="content">
+        <h1>Create Book</h1>
+
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Author" class="form-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Year" class="form-label"></label>
+                <select asp-for="Year" class="form-control" asp-items="@(ViewBag.Years as List<SelectListItem>)">
+                    <option value="">-- Select Year --</option>
+                </select>
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

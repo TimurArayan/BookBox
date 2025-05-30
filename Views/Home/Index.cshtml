@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Добро пожаловать в BookBox";
+}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: white;
+    }
+
+    body {
+        background: url('/images/library-banner.jpg') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .content {
+        background-color: rgba(0, 0, 0, 0.6); /* тёмный полупрозрачный фон */
+        padding: 40px 60px;
+        border-radius: 12px;
+        max-width: 600px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    p {
+        font-size: 1.4rem;
+        margin-bottom: 30px;
+    }
+
+    .btn-primary {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .contact-info {
+        margin-top: 40px;
+        font-weight: 500;
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="content">
+    <h1>📚 Добро пожаловать в BookBox!</h1>
+    <p>Онлайн-библиотека с лучшими книгами для чтения и вдохновения.</p>
+    <a class="btn btn-primary" asp-controller="Books" asp-action="Index">Посмотреть книги</a>
+
+    <div class="contact-info">
+        <p>📞 Телефон: +7 (495) 123-45-67</p>
+        <p>📧 Email: support@bookbox.ru</p>
+        <p>🏢 Адрес: г. Москва, ул. Книжная, д. 1</p>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: url('/images/library-banner.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+    }
+
+    .main-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+
+    .auth-content {
+        background-color: rgba(0, 0, 0, 0.85);
+        padding: 40px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .auth-title {
+        color: white;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2rem;
+    }
+
+    .form-input {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid #444;
+        color: white;
+        padding: 12px 15px;
+        width: 100%;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+        .form-input:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: #17a2b8;
+            outline: none;
+        }
+
+    .auth-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+        .auth-button:hover {
+            background-color: #218838;
+        }
+
+    .text-danger {
+        color: #ff6b6b;
+        font-size: 0.9rem;
+    }
+
+    .auth-links {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+        .auth-links a {
+            color: #17a2b8;
+            text-decoration: none;
+        }
+
+            .auth-links a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+<div class="main-wrapper">
+    <div class="auth-content">
+        <h1 class="auth-title">@ViewData["Title"]</h1>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Input.Email">Email</label>
+                <input asp-for="Input.Email" class="form-input" autocomplete="username">
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Password">Password</label>
+                <input asp-for="Input.Password" class="form-input" autocomplete="current-password">
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox">
+                    <label asp-for="Input.RememberMe">
+                        <input asp-for="Input.RememberMe" />
+                        Remember me
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="auth-button">Log in</button>
+
+            <div class="auth-links">
+                <p>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a> |
+                    <a asp-page="./ForgotPassword">Forgot password?</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Подключение валидации -->
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

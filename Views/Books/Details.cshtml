@@ -1,0 +1,105 @@
+﻿@model BookBox.Models.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: white;
+        background: url('/images/library-banner.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    .main-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+
+    .content {
+        background-color: rgba(0, 0, 0, 0.75);
+        padding: 30px 40px;
+        border-radius: 12px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    }
+
+    h1, h4 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #ccc;
+    }
+
+    dd {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-right: 10px;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+    .actions {
+        text-align: center;
+        margin-top: 30px;
+    }
+</style>
+
+<div class="main-wrapper">
+    <div class="content">
+        <h1>Book Details</h1>
+
+        <dl class="row">
+            <dt class="col-sm-3">Title</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+
+            <dt class="col-sm-3">Author</dt>
+            <dd class="col-sm-9">@Model.Author</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Year</dt>
+            <dd class="col-sm-9">@Model.Year</dd>
+        </dl>
+
+        <div class="actions">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
