@@ -15,7 +15,8 @@ namespace BookBox.Models
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
-        public int Year { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime PublicationDate { get; set; }
     }
 
 }

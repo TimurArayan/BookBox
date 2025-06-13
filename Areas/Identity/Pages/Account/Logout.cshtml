@@ -1,0 +1,69 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: white;
+        background: url('/images/library-banner.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    .logout-message {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: rgba(0,0,0,0.6);
+        text-align: center;
+        padding: 20px;
+    }
+
+    .logout-message p {
+        font-size: 1.5rem;
+        color: #fff;
+    }
+
+    .logout-message a {
+        color: #0d6efd;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="logout-message">
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <form method="post" asp-page-handler="Logout">
+            <button type="submit" class="btn btn-primary">Выйти</button>
+        </form>
+    }
+    else
+    {
+        <p>Вы успешно вышли из аккаунта.</p>
+        <a asp-page="/Index">На главную</a>
+    }
+</div>
+
+
+<header>
+    <h1>@ViewData["Title"]</h1>
+    @{
+        if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+            </form>
+        }
+        else
+        {
+            <p>Вы вышли.</p>
+            <a asp-page="/Index">На главную</a>
+        }
+    }
+</header>

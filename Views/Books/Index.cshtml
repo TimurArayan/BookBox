@@ -1,10 +1,14 @@
 ﻿@model IEnumerable<BookBox.Models.Book>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
 
 @{
     ViewData["Title"] = "Books List";
-    bool isAdmin = Context.Request.Query["role"] == "admin";
-    bool isUser = Context.Request.Query["role"] == "user";
-    bool isGuest = !isAdmin && !isUser;
+
+    bool isAdmin = User.IsInRole("Admin");
+    bool isUser = User.IsInRole("User");
+    bool isGuest = !SignInManager.IsSignedIn(User);
 }
 
 <style>
@@ -90,14 +94,6 @@
     <div class="content">
         <h1>Books</h1>
 
-        <!-- Панель переключения ролей -->
-        <div style="margin-bottom: 20px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px;">
-            <small>ТЕСТОВЫЙ РЕЖИМ:</small>
-            <a href="?role=admin" class="btn btn-sm @(isAdmin ? "btn-success" : "btn-outline-success")">Admin</a>
-            <a href="?role=user" class="btn btn-sm @(isUser ? "btn-primary" : "btn-outline-primary")">User</a>
-            <a href="?" class="btn btn-sm @(isGuest ? "btn-secondary" : "btn-outline-secondary")">Guest</a>
-        </div>
-
         @if (isAdmin)
         {
             <p>
@@ -114,33 +110,41 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var book in Model)
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var book in Model)
+                    {
+                        <tr>
+                            <td>@book.Title</td>
+                            <td>@book.Author</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@book.Id">Details</a>
+
+                                @if (isAdmin)
+                                {
+                                    @: |
+                                    <a asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+                                    @: |
+                                    <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
+                                }
+                                else if (isUser)
+                                {
+                                    @: |
+                                    <a asp-action="Buy" asp-route-id="@book.Id">Buy</a>
+                                }
+                                else
+                                {
+                                    @: |
+                                    <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Buy", new { id = book.Id })">Buy</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@book.Title</td>
-                        <td>@book.Author</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@book.Id">Details</a>
-
-                            @if (isAdmin)
-                            {
-                                @: |
-                                <a asp-action="Edit" asp-route-id="@book.Id">Edit</a>
-
-                                @: |
-                                <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
-                            }
-                            else if (isUser)
-                            {
-                                @: |
-                                <a asp-action="Buy" asp-route-id="@book.Id">Buy</a>
-                            }
-                            else
-                            {
-                                @: |
-                                <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Buy", new { id = book.Id })">Buy</a>
-                            }
-                        </td>
+                        <td colspan="3" style="text-align:center;">No books found.</td>
                     </tr>
                 }
             </tbody>

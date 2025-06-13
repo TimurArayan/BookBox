@@ -120,11 +120,9 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="Year" class="form-label"></label>
-                <select asp-for="Year" class="form-control" asp-items="@(ViewBag.Years as List<SelectListItem>)">
-                    <option value="">-- Select Year --</option>
-                </select>
-                <span asp-validation-for="Year" class="text-danger"></span>
+                <label asp-for="PublicationDate" class="form-label"></label>
+                <input asp-for="PublicationDate" type="date" class="form-control" />
+                <span asp-validation-for="PublicationDate" class="text-danger"></span>
             </div>
 
             <div class="mt-4 d-flex justify-content-between">

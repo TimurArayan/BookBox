@@ -7,13 +7,13 @@
     <UserSecretsId>aspnet-BookBox-ed74e37b-a476-468c-8811-15a456c347ef</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.16" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.16" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.16" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.16" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.16" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.16" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.16" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.16" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.16" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.16" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.16" />
+	</ItemGroup>
 
 </Project>

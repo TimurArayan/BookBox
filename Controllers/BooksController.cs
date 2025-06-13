@@ -1,163 +1,100 @@
-﻿using BookBox.Data;
-using BookBox.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using BookBox.Data;       // пространство с ApplicationDbContext
+using BookBox.Models;
 
 namespace BookBox.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
 
+        // Внедряем контекст базы данных через конструктор
         public BooksController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Books
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Books.ToListAsync());
+            // Получаем все книги из базы и передаем в представление
+            var books = await _context.Books.ToListAsync();
+            return View(books);
         }
 
-        // GET: Books/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null) return NotFound();
-
-            var book = await _context.Books.FirstOrDefaultAsync(m => m.Id == id);
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
             if (book == null) return NotFound();
-
             return View(book);
         }
 
-        // GET: Books/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewBag.Years = Enumerable.Range(1900, DateTime.Now.Year - 1899)
-                                      .Reverse()
-                                      .Select(y => new SelectListItem
-                                      {
-                                          Value = y.ToString(),
-                                          Text = y.ToString()
-                                      }).ToList();
             return View();
         }
 
-        // POST: Books/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Book book)
+        public async Task<IActionResult> Create(Book model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                // Показываем ошибки, если нужно
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-                foreach (var error in errors)
-                {
-                    Console.WriteLine(error.ErrorMessage);
-                }
-
-                // Заполняем список лет снова
-                ViewBag.Years = Enumerable.Range(1900, DateTime.Now.Year - 1899)
-                                          .Reverse()
-                                          .Select(y => new SelectListItem
-                                          {
-                                              Value = y.ToString(),
-                                              Text = y.ToString()
-                                          }).ToList();
-
-                return View(book);
-            }
-
-            _context.Add(book);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.Years = Enumerable.Range(1900, DateTime.Now.Year - 1899)
-                                      .Reverse()
-                                      .Select(y => new SelectListItem
-                                      {
-                                          Value = y.ToString(),
-                                          Text = y.ToString()
-                                      }).ToList();
-
-            return View(book);
-        }
-
-        // POST: Books/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Book book)
-        {
-            if (id != book.Id)
-            {
-                return NotFound();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Years = Enumerable.Range(1900, DateTime.Now.Year - 1899)
-                                          .Reverse()
-                                          .Select(y => new SelectListItem
-                                          {
-                                              Value = y.ToString(),
-                                              Text = y.ToString()
-                                          }).ToList();
-
-                return View(book);
-            }
-
-            try
-            {
-                _context.Update(book);
+                _context.Books.Add(model);
                 await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Books.Any(e => e.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToAction(nameof(Index));
+            return View(model);
         }
 
-        // GET: Books/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null) return NotFound();
-
-            var book = await _context.Books.FirstOrDefaultAsync(m => m.Id == id);
+            var book = await _context.Books.FindAsync(id);
             if (book == null) return NotFound();
-
             return View(book);
         }
 
-        // POST: Books/Delete/5
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Book model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Books.Update(model);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Books.Any(b => b.Id == model.Id))
+                        return NotFound();
+                    else
+                        throw;
+                }
+            }
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var book = await _context.Books.FindAsync(id);
+            if (book == null) return NotFound();
+            return View(book);
+        }
+
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -167,24 +104,15 @@ namespace BookBox.Controllers
                 _context.Books.Remove(book);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public IActionResult Buy(int id)
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> Buy(int id)
         {
-            //if (!User.Identity.IsAuthenticated)
-            //{
-            //    return RedirectToAction("Login", "Account", new { area = "Identity", returnUrl = Url.Action("Buy", new { id = id }) });
-            //}
-
-            var book = _context.Books.FirstOrDefault(b => b.Id == id);
-
-            if (book == null)
-            {
-                return NotFound();
-            }
-
+            var book = await _context.Books.FindAsync(id);
+            if (book == null) return NotFound();
+            // Логика покупки книги здесь
             return View(book);
         }
     }
